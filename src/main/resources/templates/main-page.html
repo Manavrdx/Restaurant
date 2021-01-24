@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thmeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Main page</title>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	
+</head>
+<body>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+    <a href="#home" class="w3-bar-item w3-button"><b>UNCOVER</b></a>
+    <a th:href="@{/restaurant/places}">Get Review/Add Review</a>
+    <div class="w3-right w3-hide-small">
+      <a href="#reviews" class="w3-bar-item w3-button">Reviews</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Header -->
+<header class="w3-display-container w3-content w3-wide" style="max-width:1500px;" id="home">
+  <img class="w3-image" src="/images/1528.jpg"width="1500" height="800">
+  <div class="w3-display-middle w3-margin-top w3-center">
+    <h1 class="w3-xxlarge w3-text-white"><span class="w3-padding w3-black w3-opacity-min"><b>UNCOVER</b></span></h1>
+  </div>
+</header>
+
+<div class="w3-content w3-padding" style="max-width:1564px">
+
+  <!-- Project Section -->
+  <div class="w3-container w3-padding-32" id="reviews">
+    <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16" style="font: bold; font-size: 36pt">Reviews</h3>
+  </div>
+  
+
+
+<div class="container">
+	<div class="w3-row-padding" align="center">
+	  <div class="w3-col l3 m6 w3-margin-bottom">
+		<div th:each="temp : ${reviews}" style="border: 5px solid black; padding-bottom: 10px;">
+		  <p th:text="${temp.restaurantName}" style="font: bold; font-size: 20pt;"/>
+		  <img th:attr="src=@{image(id=${temp.id})}" style="width:100%"/>
+	      <p th:text = "${temp.user.name}" style="text-decoration: underline;"/>
+	      <p th:text ="${temp.comment}" /> 
+	    </div>
+	   </div>
+	</div>
+</div>
+ 
+
+
+  
+  
+</div>
+
+
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding-16">
+  <p>Thank you!</p>
+</footer>
+
+
+
+</body>
+</html>
