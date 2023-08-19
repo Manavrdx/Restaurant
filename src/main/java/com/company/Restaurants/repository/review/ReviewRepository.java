@@ -1,10 +1,10 @@
-package com.company.Restaurants.dao;
+package com.company.Restaurants.repository.review;
 
 import java.util.List;
 
 import com.company.Restaurants.entity.Review;
 
-public interface ReviewDao {
+public interface ReviewRepository {
 
 	List<Review> findAll();
 	

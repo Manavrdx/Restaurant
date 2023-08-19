@@ -1,4 +1,4 @@
-package com.company.Restaurants.dao;
+package com.company.Restaurants.repository.review;
 
 import java.util.List;
 
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Repository;
 import com.company.Restaurants.entity.Review;
 
 @Repository
-public class ReviewDaoImpl implements ReviewDao {
+public class ReviewRepositoryImpl implements ReviewRepository {
 	
 	private final EntityManager entityManager;
 	
 	@Autowired
-	public ReviewDaoImpl(EntityManager entityManager) {
+	public ReviewRepositoryImpl(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 

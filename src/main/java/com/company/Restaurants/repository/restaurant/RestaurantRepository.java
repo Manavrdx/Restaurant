@@ -1,4 +1,4 @@
-package com.company.Restaurants.dao;
+package com.company.Restaurants.repository.restaurant;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import com.company.Restaurants.entity.Review;
 import com.company.Restaurants.entity.User;
 import com.company.Restaurants.external.Place;
 
-public interface RestaurantDao {
+public interface RestaurantRepository {
 	
 	List<Restaurant> findAll();
 	

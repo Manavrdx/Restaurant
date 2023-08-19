@@ -1,6 +1,7 @@
-package com.company.Restaurants.dao;
+package com.company.Restaurants.repository.restaurant;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
@@ -22,28 +23,28 @@ import com.company.Restaurants.external.Place;
 import com.company.Restaurants.external.PlaceResult;
 
 @Repository
-public class RestaurantDaoImpl implements RestaurantDao {
+public class RestaurantRepositoryImpl implements RestaurantRepository {
 	
 	private final RestTemplate restTemplate;
 	
-	private final String restUrl;
+	private final String googleMapUrl;
 	
-	private Logger logger = Logger.getLogger(getClass().getName());
+	private final Logger logger = Logger.getLogger(getClass().getName());
 	
 	private final EntityManager entityManager;
 	
 	@Autowired
-	public RestaurantDaoImpl(EntityManager entityManager,RestTemplate theRestTemplate,
-							@Value("${google.maps.url}") String theUrl) {
+	public RestaurantRepositoryImpl(EntityManager entityManager, RestTemplate theRestTemplate,
+									@Value("${google.maps.url}") String theUrl) {
 		logger.info("Loaded google map URL:: "+ theUrl);
 		this.entityManager = entityManager;
 		restTemplate = theRestTemplate;
-		restUrl = theUrl;
+		googleMapUrl = theUrl;
 	}
 
 	public List<Restaurant> findAll() {
-		TypedQuery<Restaurant> theQuery = entityManager.createQuery("from Restaurant",Restaurant.class);
-		return theQuery.getResultList();
+		TypedQuery<Restaurant> query = entityManager.createQuery("from Restaurant",Restaurant.class);
+		return query.getResultList();
 	}
 
 	public Restaurant findById(int id) {
@@ -51,8 +52,7 @@ public class RestaurantDaoImpl implements RestaurantDao {
 	}
 
 	public void save(Restaurant theRestaurant) {
-		Restaurant dbRestaurant = entityManager.merge(theRestaurant);
-		theRestaurant.setId(dbRestaurant.getId());
+		entityManager.merge(theRestaurant);
 	}
 
 	public void deleteById(int id) {
@@ -73,13 +73,13 @@ public class RestaurantDaoImpl implements RestaurantDao {
 	}
 
 	public List<Place> getPlaces() {
-		ResponseEntity<PlaceResult> responseEntity = restTemplate.exchange(restUrl,
+		ResponseEntity<PlaceResult> responseEntity = restTemplate.exchange(googleMapUrl,
 													 HttpMethod.GET, null,
 				new ParameterizedTypeReference<>() {
 				});
 
 		// get the list of places from response
-		List<Place> places = responseEntity.getBody().getResults();
+		List<Place> places = Objects.requireNonNull(responseEntity.getBody()).getResults();
 		
 		logger.info("In getPlaces(): Places" + places);
 		
@@ -89,42 +89,39 @@ public class RestaurantDaoImpl implements RestaurantDao {
 
 	public List<Restaurant> searchRestaurants(String name, String vicinity) {
 		Query theQuery = entityManager.createQuery("from Restaurant where name=:restaurant and vicinity=:location");
-		theQuery.setParameter("restaurant",name);
-		theQuery.setParameter("location",vicinity);
-		List<Restaurant> theRestaurant = theQuery.getResultList();
+		theQuery.setParameter("restaurant", name);
+		theQuery.setParameter("location", vicinity);
+		List<Restaurant> restaurants = theQuery.getResultList();
 
-		if(theRestaurant.isEmpty()) {
+		if(restaurants.isEmpty()) {
 			Restaurant restaurant = new Restaurant(name,vicinity);
 			save(restaurant);
-			theRestaurant.add(restaurant);
+			restaurants.add(restaurant);
 		}
 		
-		return theRestaurant;
+		return restaurants;
 	}
 
-
-	public List<Review> findReviewByUserId(int theId) {
-		User theUser = entityManager.find(User.class, theId);
-		return theUser.getReviews();
+	public List<Review> findReviewByUserId(int id) {
+		User user = entityManager.find(User.class, id);
+		return user.getReviews();
 	}
-
 
 	public List<Review> getAllReviews() {
-		TypedQuery<Review> theQuery = entityManager.createQuery("from Review", Review.class);
-		return theQuery.getResultList();
+		TypedQuery<Review> query = entityManager.createQuery("from Review", Review.class);
+		return query.getResultList();
 	}
 
 
-	public void saveUser(User theUser) {
-		User dbUser = entityManager.merge(theUser);
-		theUser.setId(dbUser.getId());
+	public void saveUser(User user) {
+		entityManager.merge(user);
 	}
 
 	public User searchUser(String name, String email) {
-		Query theQuery = entityManager.createQuery("from User where name=:name and email=:emailId");
-		theQuery.setParameter("name",name);
-		theQuery.setParameter("emailId",email);
-		List<User> theUser = theQuery.getResultList();
+		Query query = entityManager.createQuery("from User where name=:name and email=:emailId");
+		query.setParameter("name",name);
+		query.setParameter("emailId",email);
+		List<User> theUser = query.getResultList();
 		if(theUser.isEmpty()) {
 			User user = new User(name,email);
 			entityManager.merge(user);

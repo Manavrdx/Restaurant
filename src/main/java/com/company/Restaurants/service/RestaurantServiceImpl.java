@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.company.Restaurants.dao.RestaurantDao;
-import com.company.Restaurants.dao.ReviewDao;
+import com.company.Restaurants.repository.restaurant.RestaurantRepository;
+import com.company.Restaurants.repository.review.ReviewRepository;
 import com.company.Restaurants.entity.Restaurant;
 import com.company.Restaurants.entity.Review;
 import com.company.Restaurants.entity.User;
@@ -16,79 +16,79 @@ import com.company.Restaurants.external.Place;
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
 
-	private final RestaurantDao restaurantDao;
+	private final RestaurantRepository restaurantRepository;
 	
-	private final ReviewDao reviewDao;
+	private final ReviewRepository reviewRepository;
 	
 	@Autowired
-	public RestaurantServiceImpl(RestaurantDao restaurantDao, ReviewDao reviewDao) {
-		this.restaurantDao = restaurantDao;
-		this.reviewDao = reviewDao;
+	public RestaurantServiceImpl(RestaurantRepository restaurantRepository, ReviewRepository reviewRepository) {
+		this.restaurantRepository = restaurantRepository;
+		this.reviewRepository = reviewRepository;
 	}
 
 	@Transactional
 	public List<Restaurant> findAll() {
-		return restaurantDao.findAll();
+		return restaurantRepository.findAll();
 	}
 	
 	@Transactional
 	public Restaurant findById(int id) {
-		return restaurantDao.findById(id);
+		return restaurantRepository.findById(id);
 	}
 
 	@Transactional
 	public void save(Restaurant theRestaurant) {
-		restaurantDao.save(theRestaurant);
+		restaurantRepository.save(theRestaurant);
 	}
 
 	@Transactional
 	public void deleteById(int id) {
-		restaurantDao.deleteById(id);
+		restaurantRepository.deleteById(id);
 	}
 
 	@Transactional
 	public List<Review> findReviewByRestaurantId(int id) {
-		return restaurantDao.findReviewByRestaurantId(id);
+		return restaurantRepository.findReviewByRestaurantId(id);
 	}
 
 	@Transactional
 	public void saveReview(User theUser, Review theReview, int theId) {
-		restaurantDao.saveReview(theUser, theReview, theId);
+		restaurantRepository.saveReview(theUser, theReview, theId);
 	}
 
 	@Transactional
 	public List<Place> getPlaces() {
-		return restaurantDao.getPlaces();
+		return restaurantRepository.getPlaces();
 	}
 
 	@Transactional
 	public List<Restaurant> searchRestaurants(String name, String vicinity) {
-		return restaurantDao.searchRestaurants(name,vicinity);
+		return restaurantRepository.searchRestaurants(name,vicinity);
 	}
 
 	@Transactional
 	public List<Review> findReviewByUserId(int theId) {
-		return restaurantDao.findReviewByUserId(theId);
+		return restaurantRepository.findReviewByUserId(theId);
 	}
 
 	@Transactional
 	public Review findReviewById(int id) {
-		return reviewDao.findReviewById(id);
+		return reviewRepository.findReviewById(id);
 	}
 
 	@Transactional
 	public List<Review> getAllReviews() {
-		return restaurantDao.getAllReviews();
+		return restaurantRepository.getAllReviews();
 	}
 
 	@Transactional
 	public void saveUser(User theUser) {
-		restaurantDao.saveUser(theUser);
+		restaurantRepository.saveUser(theUser);
 	}
 
 	@Transactional
 	public User searchUser(String name, String email) {
-		return restaurantDao.searchUser(name, email);
+		return restaurantRepository.searchUser(name, email);
 	}
 
 }

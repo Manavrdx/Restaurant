@@ -1,29 +1,22 @@
 package com.company.Restaurants.controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import com.company.Restaurants.entity.Restaurant;
+import com.company.Restaurants.entity.Review;
+import com.company.Restaurants.entity.User;
+import com.company.Restaurants.external.Place;
+import com.company.Restaurants.service.RestaurantService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import com.company.Restaurants.entity.Restaurant;
-import com.company.Restaurants.entity.Review;
-import com.company.Restaurants.entity.User;
-import com.company.Restaurants.service.RestaurantService;
-import com.company.Restaurants.external.Place;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 @Controller
 @RequestMapping("/restaurant")
@@ -37,72 +30,73 @@ public class RestaurantController {
 	}
 	
 	@GetMapping("/main")
-	public String getReviews(Model theModel) {
-		List<Review> theReviews = restaurantService.getAllReviews();
-		theModel.addAttribute("reviews",theReviews);
+	public String getReviews(Model model) {
+		List<Review> reviews = restaurantService.getAllReviews();
+		model.addAttribute("reviews", reviews);
 		return "main-page";
 	}
 
 	@GetMapping("/all")
-	public String getRestaurants(Model theModel) {
-		List<Restaurant> theRestaurant = restaurantService.findAll();
-		theModel.addAttribute("restaurants",theRestaurant);
+	public String getRestaurants(Model model) {
+		List<Restaurant> restaurants = restaurantService.findAll();
+		model.addAttribute("restaurants", restaurants);
 		return "restaurants-page";
 	}
 	
 	@GetMapping("/places")
-	public String getPlaces(Model theModel) {
+	public String getPlaces(Model model) {
 		List<Place> places = restaurantService.getPlaces();
-		theModel.addAttribute("places",places);
+		model.addAttribute("places", places);
 		return "place-page" ;
 	}
 	
 	@GetMapping("/reviewForId")
-	public String showRestaurantReviews(@RequestParam("restaurantId") int theId, Model theModel) {
-		List<Review> theReview = restaurantService.findReviewByRestaurantId(theId);
-		theModel.addAttribute("reviews",theReview);
+	public String showRestaurantReviews(@RequestParam("restaurantId") int id, Model model) {
+		List<Review> reviews = restaurantService.findReviewByRestaurantId(id);
+		model.addAttribute("reviews", reviews);
 		return "review-page";
 	}
 	
 	@GetMapping("/addReview")
-	public String addRestaurantReview(@RequestParam("restaurantId") int theId, Model theModel) {
-		Review theReview = new Review();
-		theModel.addAttribute("review",theReview);
-		theModel.addAttribute("Id",theId);
+	public String addRestaurantReview(@RequestParam("restaurantId") int id, Model model) {
+		Review review = new Review();
+		model.addAttribute("review", review);
+		model.addAttribute("Id", id);
 		return "review-form";
 	}
 	
 	@GetMapping("/search")
-	public String searchRestaurant(@RequestParam("name") String name, @RequestParam("vicinity") String vicinity
-									, Model theModel) {
-		List<Restaurant> theRestaurant = restaurantService.searchRestaurants(name,vicinity);
-		theModel.addAttribute("restaurants",theRestaurant);
+	public String searchRestaurant(@RequestParam("name") String name, @RequestParam("vicinity") String vicinity,
+								   Model model) {
+		List<Restaurant> theRestaurant = restaurantService.searchRestaurants(name, vicinity);
+		model.addAttribute("restaurants", theRestaurant);
 		return "restaurants-page";
 	}
 	
 	@PostMapping("/saveReview")
-	public String saveReview(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("restaurantId") int theId,
-							 @RequestParam("comment")String theComment, @RequestParam("image") CommonsMultipartFile file) {
+	public String saveReview(@RequestParam("name") String name, @RequestParam("email") String email,
+							 @RequestParam("restaurantId") int restaurantId, @RequestParam("comment") String theComment,
+							 @RequestParam("image") CommonsMultipartFile file) {
 		byte[] data = file.getBytes();
-		Restaurant theRestaurant = restaurantService.findById(theId);
-		Review theReview = new Review(theRestaurant.getName(),theComment,data);
-		User theUser = restaurantService.searchUser(name,email);
-		restaurantService.saveReview(theUser,theReview,theId);
+		Restaurant theRestaurant = restaurantService.findById(restaurantId);
+		Review theReview = new Review(theRestaurant.getName(), theComment,data);
+		User theUser = restaurantService.searchUser(name, email);
+		restaurantService.saveReview(theUser, theReview, restaurantId);
 		return "redirect:/restaurant/places";
 	}
 	
 	@GetMapping("/user/{id}")
-	public String reviewForUser(Model theModel, @PathVariable("id") int theId) {
-		List<Review> theReview = restaurantService.findReviewByUserId(theId);
-		theModel.addAttribute("reviews",theReview);
+	public String reviewForUser(Model model, @PathVariable("id") int id) {
+		List<Review> theReview = restaurantService.findReviewByUserId(id);
+		model.addAttribute("reviews",theReview);
 		return "review-page";
 	}
 	
 	@GetMapping("/image")
-	public void showProductImage(@RequestParam("id") int theId
-	                               ,HttpServletResponse response) throws IOException {
+	public void showProductImage(@RequestParam("id") int id,
+								 HttpServletResponse response) throws IOException {
 		response.setContentType("image/jpeg");
-		Review theReview = restaurantService.findReviewById(theId);
+		Review theReview = restaurantService.findReviewById(id);
 		InputStream is = new ByteArrayInputStream(theReview.getImage());
 		IOUtils.copy(is, response.getOutputStream());
 	}
