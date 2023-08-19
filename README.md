@@ -5,6 +5,6 @@ experiece to a restaurant. A basic review contains Name of the Restaurant, Name 
 
 # Technologies used
 GOOGLE API : to get the user's location and print the nearby restaurants.
-Backend : Java, SpringBoot, Hibernate
-Frontend : HTML, CSS, Thymeleaf
+Backend : Java, SpringBoot, Hibernate.
+Frontend : HTML, CSS, Thymeleaf.
 DataBase : MySQl
