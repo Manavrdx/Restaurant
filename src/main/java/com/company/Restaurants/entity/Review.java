@@ -1,4 +1,4 @@
-package com.company.Restaurants.Entity;
+package com.company.Restaurants.entity;
 
 
 import javax.persistence.CascadeType;
@@ -41,7 +41,6 @@ public class Review {
 		this.comment = comment;
 		this.image = image;
 	}
-
 
 	public int getId() {
 		return id;

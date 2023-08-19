@@ -1,4 +1,4 @@
-package com.company.Restaurants.Dao;
+package com.company.Restaurants.dao;
 
 import java.util.List;
 
@@ -8,12 +8,12 @@ import javax.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.company.Restaurants.Entity.Review;
+import com.company.Restaurants.entity.Review;
 
 @Repository
 public class ReviewDaoImpl implements ReviewDao {
 	
-	private EntityManager entityManager;
+	private final EntityManager entityManager;
 	
 	@Autowired
 	public ReviewDaoImpl(EntityManager entityManager) {
@@ -21,22 +21,12 @@ public class ReviewDaoImpl implements ReviewDao {
 	}
 
 	public List<Review> findAll() {
-		
 		TypedQuery<Review> theQuery = entityManager.createQuery("from Review",Review.class);
-		
-		List<Review> reviews = theQuery.getResultList();
-		
-		return reviews;
-
+		return theQuery.getResultList();
 	}
 
 	public Review findReviewById(int id) {
-		
-		Review theReview = entityManager.find(Review.class,id);
-		
-		return theReview;
-		
+		return entityManager.find(Review.class,id);
 	}
-
 
 }

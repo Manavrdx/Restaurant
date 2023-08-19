@@ -1,4 +1,4 @@
-package com.company.Restaurants.api;
+package com.company.Restaurants.external;
 
 import java.util.List;
 
@@ -30,7 +30,4 @@ public class PlaceResult {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
-	
-	
 }

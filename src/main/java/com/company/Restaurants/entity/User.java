@@ -1,4 +1,4 @@
-package com.company.Restaurants.Entity;
+package com.company.Restaurants.entity;
 
 import java.util.List;
 
@@ -69,7 +69,5 @@ public class User {
 	public void setReviews(List<Review> reviews) {
 		this.reviews = reviews;
 	}
-	
-	
-	
+
 }

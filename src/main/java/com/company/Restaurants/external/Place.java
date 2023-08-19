@@ -1,4 +1,4 @@
-package com.company.Restaurants.api;
+package com.company.Restaurants.external;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,19 +12,13 @@ public class Place {
 	@JsonProperty("vicinity")
 	private String vicinity;
 
-	//constructor
-	public Place() {
-		
-	}
+	public Place() {}
 	
 	public Place(String name, String vicinity) {
 		this.name = name;
 		this.vicinity = vicinity;
 	}
 
-
-
-	//getters and setters
 	public String getName() {
 		return name;
 	}
@@ -40,5 +34,4 @@ public class Place {
 	public void setVicinity(String vicinity) {
 		this.vicinity = vicinity;
 	}
-	
 }

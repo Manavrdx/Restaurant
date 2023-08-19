@@ -1,4 +1,4 @@
-package com.company.Restaurants.Entity;
+package com.company.Restaurants.entity;
 
 import java.util.List;
 
@@ -12,9 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="restaurant")
@@ -79,7 +76,5 @@ public class Restaurant {
 	public void setReviews(List<Review> reviews) {
 		this.reviews = reviews;
 	}
-	
-	
-	
+
 }

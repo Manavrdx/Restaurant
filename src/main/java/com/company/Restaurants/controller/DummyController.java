@@ -1,15 +1,14 @@
-package com.company.Restaurants.Controller;
+package com.company.Restaurants.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class DemoController {
+public class DummyController {
 	
 	@GetMapping("/")
-	public String mainpage(Model theModel) {
-		
+	public String mainPage(Model theModel) {
 		return "redirect:/restaurant/main";
 	}
 	
